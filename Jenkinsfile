@@ -2,7 +2,6 @@ pipeline {
     agent any
     tools {
         nodejs 'NodeJS'
-        docker 'Docker'
     }
     stages {
         stage('Checkout') {
@@ -20,6 +19,18 @@ pipeline {
         stage('Running Test Cases') {
             steps {
                 sh 'npm run test'
+            }
+        }
+
+        stage('Install Docker') {
+            steps {
+                sh """
+                    if ! command -v docker > /dev/null; then
+                      sudo apt update
+                      sudo apt install -y docker.io
+                      sudo usermod -aG docker $(whoami)
+                    fi
+                """
             }
         }
 
