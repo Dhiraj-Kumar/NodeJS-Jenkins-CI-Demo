@@ -24,22 +24,21 @@ pipeline {
 
         stage('Build & Deploy Docker Image') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]){
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh """
-                    echo Building Docker Image
-                    docker build . -t dhiraj2001/node-jenkins-app
-                    
-                    echo Logging into docker hub
-                    docker login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%
+                    echo Building Docker image...
+                    docker build -t dhiraj2001/myapp .
 
-                    echo Pushing image to docker hub
-                    docker push dhiraj2001/node-jenkins-app
+                    echo Logging into Docker Hub...
+                    docker login -u %DOCKER_USER% -p %DOCKER_PASS%
 
-                    echo Logout from docker hub
+                    echo Pushing Docker image...
+                    docker push dhiraj2001/myapp
+
+                    echo Logging out...
                     docker logout
                     """
                 }
-                 
             }
         }
     }
