@@ -1,0 +1,49 @@
+name: NodeJS CI Demo
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node Environment
+        uses: actions/setup-node@v3.9.1
+
+      - name: Restoring the dependencies
+        run: npm install
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node Environment
+        uses: actions/setup-node@v3.9.1
+
+      - name: Restoring the dependencies
+        run: npm install
+
+      - name: Running test cases
+        run: npm run test
+  publish:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Build & publish docker image to Docker Hub
+        uses: mr-smithers-excellent/docker-build-push@v6.4
+        with:
+          image: dhiraj2001/myapp
+          tags: latest
+          registry: docker.io
+          dockerfile: ./Dockerfile
+          username: ${{secrets.DOCKER_USERNAME}}
+          password: ${{secrets.DOCKER_PASSWORD}}
