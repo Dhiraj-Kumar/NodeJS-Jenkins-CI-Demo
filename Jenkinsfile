@@ -22,19 +22,6 @@ pipeline {
             }
         }
 
-        stage('Install Docker') {
-            steps {
-                sh '''
-                echo installing docker
-                if ! command -v docker > /dev/null; then
-                apt update
-                apt install -y docker.io
-                usermod -aG docker $(whoami)
-                fi
-                '''
-            }
-        }
-
         stage('Build & Deploy Docker Image') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]){
