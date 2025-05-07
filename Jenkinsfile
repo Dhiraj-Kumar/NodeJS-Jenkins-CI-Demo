@@ -24,13 +24,13 @@ pipeline {
 
         stage('Build & Deploy Docker Image') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh """
                     echo Building Docker image...
                     docker build -t dhiraj2001/myapp .
 
                     echo Logging into Docker Hub...
-                    docker login -u %DOCKER_USER% -p %DOCKER_PASS%
+                    echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
                     echo Pushing Docker image...
                     docker push dhiraj2001/myapp
