@@ -21,5 +21,26 @@ pipeline {
                 sh 'npm run test'
             }
         }
+
+        stage('Build & Deploy Docker Image') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]){
+                    sh """
+                    echo Building Docker Image
+                    docker build . -t dhiraj2001/node-jenkins-app
+                    
+                    echo Logging into docker hub
+                    docker login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%
+
+                    echo Pushing image to docker hub
+                    docker push dhiraj2001/node-jenkins-app
+
+                    echo Logout from docker hub
+                    docker logout
+                    """
+                }
+                 
+            }
+        }
     }
 }
