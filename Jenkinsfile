@@ -27,9 +27,9 @@ pipeline {
                 sh '''
                 echo installing docker
                 if ! command -v docker > /dev/null; then
-                sudo apt update
-                sudo apt install -y docker.io
-                sudo usermod -aG docker $(whoami)
+                apt update
+                apt install -y docker.io
+                usermod -aG docker $(whoami)
                 fi
                 '''
             }
