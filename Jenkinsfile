@@ -27,13 +27,13 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh """
                     echo Building Docker image...
-                    docker build -t dhiraj2001/myapp .
+                    docker build -t dhiraj2001/nodejs-jenkins-app .
 
                     echo Logging into Docker Hub...
                     echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
                     echo Pushing Docker image...
-                    docker push dhiraj2001/myapp
+                    docker push dhiraj2001/nodejs-jenkins-app
 
                     echo Logging out...
                     docker logout
